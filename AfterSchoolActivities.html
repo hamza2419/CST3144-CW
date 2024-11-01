@@ -14,7 +14,7 @@
     <div id="app">
         <header>
             <h1 v-text="sitename"></h1>
-            <button v-on:click="showCheckout" class="checkout-button">
+            <button v-on:click="handleCheckout" class="checkout-button">
                 {{ cartItemCount }}
                 <span class="fas fa-cart-plus"></span> Checkout
             </button>
@@ -81,7 +81,7 @@
                 <h2>Checkout</h2>
                 <div v-if="cart.length === 0">
                     <p>Your cart is empty. Please add items to your cart before placing an order.</p>
-                    <button v-on:click="showCheckout">Continue Shopping</button>
+                    
                 </div>
                 <div v-else>
                     <p>
@@ -177,6 +177,13 @@
                         this.cart.push({ id: product.id, title: product.title, quantity: 1, price: product.price, maxQuantity: product.availableInventory });
                     }
                 },
+                handleCheckout() {
+                    if (this.cart.length === 0) {
+                        this.showProduct = true;
+                    } else {
+                        this.showCheckout();
+                    }
+                },
                 showCheckout() {
                     if (this.cart.length === 0) {
                         alert('Your cart is empty. Please add items before proceeding to checkout! ');
@@ -215,7 +222,7 @@
                         }
                     } 
                     
-                }
+                },
                 cartCount(id) {
                     return this.cart.filter(item => item.id === id).reduce((total, item) => total + item.quantity, 0);
                 },
