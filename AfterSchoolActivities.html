@@ -185,9 +185,14 @@
                 submitForm() {
                     if (this.cart.length === 0) {
                         alert('Your cart is empty. Please add items to your cart before placing an order.');
-                    } else {
-                        alert('Order submitted!');
+                        return;
                     }
+                    if (!this.order.firstName || !this.order.lastName || !this.order.phone || !this.order.state) {
+                        alert('Please fill in the required fields in order to place your order!');
+                        return;
+                    }
+                    alert('Order submitted!');
+                    
                 },
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
