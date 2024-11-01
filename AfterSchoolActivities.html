@@ -28,6 +28,7 @@
                         <option value="price">Price</option>
                         <option value="rating">Rating</option>
                         <option value="location">Location</option>
+                        <option value="stock">Stock</option>
                     </select>
                     <div>
                         <button @click="sortAscending">Sort Ascending</button>
@@ -170,7 +171,11 @@
                     }
                 },
                 showCheckout() {
-                    this.showProduct = !this.showProduct;
+                    if (this.cart.length === 0) {
+                        alert('Your cart is empty. Please add items before proceeding to checkout! ');
+                    } else {
+                        this.showProduct = !this.showProduct;
+                    }
                 },
                 updateCart(item) {
                     const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
