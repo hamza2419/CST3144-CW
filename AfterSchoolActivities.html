@@ -118,7 +118,7 @@
                     <p>Phone: {{ order.phone }}</p>
                     <p>State: {{ order.state }}</p>
 
-                    <button v-on:click="submitForm">Place Order</button>
+                    <button v-on:click="submitForm" :disabled="isOrderButtonDisabled">Place Order</button>
                 </div>
             </div>
         </main>
@@ -135,7 +135,8 @@
                     firstName: '',
                     lastName: '',
                     phone: '',
-                    state: ''    
+                    state: '',
+                    method:''    
                 },
                 states: {
                     AL: 'Alabama',
@@ -229,6 +230,13 @@
                 },
                 cartItems() {
                     return this.cart;
+                },
+                isOrderButtonDisabled() {
+                    return !this.order.firstName.trim() || 
+                           !this.order.lastName.trim() || 
+                           !this.order.phone.trim() ||
+                           !this.order.state.trim() ||
+                           !this.order.method;
                 },
                 cartTotal() {
                     
