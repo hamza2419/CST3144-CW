@@ -22,6 +22,10 @@
         <main>
             <div v-if="showProduct">
                 <div>
+                    <label for="searchBar">Search Products:</label>
+                    <input type="text" v-model="searchQuery" id="searchBar" placeholder="Search for Activities...">
+                </div>
+                <div>
                     <label for="sortOptions">Sort by:</label>
                     <select v-model="sortOption" id="sortOptions">
                         <option value="name">Name</option>
@@ -36,7 +40,7 @@
                     </div>
                 </div>
                 <div class="product-list">
-                    <div class="product-item" v-for="product in sortedProducts" :key="product.id">
+                    <div class="product-item" v-for="product in filteredProducts" :key="product.id">
                         <h2 v-text="product.title"></h2>
                         <figure>
                             <img :src="product.image" alt="Product Image" />
@@ -159,7 +163,8 @@
                 },
                 cart: [],
                 sortOption: 'name',
-                sortOrder: 'asc' 
+                sortOrder: 'asc',
+                searchQuery: ''
             },
             methods: {
                 addToCart(product) {
@@ -228,8 +233,13 @@
                
                     },
                
-                sortedProducts() {
+                filteredProducts() {
                     let productsToSort = [...this.products];
+                    if (this.searchQuery) {
+                        productsToSort = productsToSort.filter(product =>
+                            product.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                        );  
+                    }
                     if (this.sortOption === 'location') {
                         productsToSort.sort((a, b) => {
                             if (this.sortOrder === 'asc') {
