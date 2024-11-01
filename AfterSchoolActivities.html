@@ -73,6 +73,8 @@
                             <option v-for="n in 11" :key="n" :value="n - 1">{{ n - 1 }}</option>
                         </select>
                         <p>Price: {{ (item.quantity * item.price).toFixed(2) }} $</p>
+                        <button v-if="item.quantity > 1" v-on:click="removeItem(item)">Remove Item</button>
+                        <button v-else v-on:click="removeItem(item)">Remove Item</button>
                     </div>
                     <p><strong>Total: {{ cartTotal }} $</strong></p>
                 </div>
@@ -203,6 +205,17 @@
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
                 },
+                removeItem(item) {
+                    if (item.quantity > 1) {
+                        item.quantity--;
+                    }  else {
+                        const index = this.cart.indexOf(item);
+                        if (index > -1) {
+                            this.cart.splice(index, 1);
+                        }
+                    } 
+                    
+                }
                 cartCount(id) {
                     return this.cart.filter(item => item.id === id).reduce((total, item) => total + item.quantity, 0);
                 },
