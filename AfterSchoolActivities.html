@@ -43,7 +43,7 @@
                         </figure>
                         <p v-html="product.description"></p>
                         <p>Price: {{ product.price }} $</p>
-                        <p>Available stock: {{ availableStock(product) }}</p>
+                        <p>Available Spaces: {{ availableStock(product) }}</p>
                         <p><strong>Location:</strong> {{ product.Location }}</p>
                         <button v-on:click="addToCart(product)" v-if="canAddToCart(product)">
                             Add to cart
