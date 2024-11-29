@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 
+const products = require('./Products');
+
 const app = express();
 
 app.use(express.json());
@@ -20,3 +22,15 @@ let db;
 MongoClient.connect('mongodb+srv://hamzaakhan24:mdx986868@cst3144.sq6yv.mongodb.net/', (err, client) => {
     db = client.db('webstore');
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res, next) => {
+    res.sendFile(path.join(__dirname, 'public', 'AfterSchoolActivities.html'));
+
+});
+
+app.get('./Products', (req, res) => {
+    res.json(Products);
+});
+
