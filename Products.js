@@ -6,7 +6,7 @@ let products = [
         "price": 40.00,
         "image": "Martial Arts.jpg",
         "Location": "Alabama",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 4
 
     },
@@ -16,7 +16,7 @@ let products = [
         "price": 40.00,
         "image": "Sports.jpg",
         "Location": "Nevada",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 3
 },
 {
@@ -26,7 +26,7 @@ let products = [
         "price": 35.00,
         "image": "Cook.jpg",
         "Location": "Alabama",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 2
 
 },
@@ -37,7 +37,7 @@ let products = [
         "price": 30.00,
         "image": "drama.jpg",
         "Location": "Arizona",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 2
 
 },
@@ -48,7 +48,7 @@ let products = [
         "price": 50.00,
         "image": "Camera.jpg",
         "Location": "California",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 5
 
 },
@@ -59,7 +59,7 @@ let products = [
         "price": 25.00,
         "image": "Dance.jpg",
         "Location": "Nevada",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 3
  
 },
@@ -70,7 +70,7 @@ let products = [
         "price": 45.00,
         "image": "Tech.jpg",
         "Location": "California",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 4
 
 },
@@ -81,7 +81,7 @@ let products = [
         "price": 20.00,
         "image": "Book.jpg",
         "Location": "Arizona",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 2
 
 },
@@ -92,7 +92,7 @@ let products = [
         "price": 35.00,
         "image": "Fashion.jpg",
         "Location": "Nevada",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 4
 
 },
@@ -103,7 +103,7 @@ let products = [
         "price": 25.00,
         "image": "Public.jpg",
         "Location": "Alabama",
-        "availableInventory": 10,
+        "availableInventory": 5,
         "rating": 3
 
 }

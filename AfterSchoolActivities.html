@@ -94,7 +94,7 @@
                     </p>
                     <p>
                         <strong>Phone Number:</strong>
-                        <input v-model="order.phone" type="text" maxlength="13" @input="order.phone = order.phone.replace(/[^0-9+]/g, '')" />
+                        <input v-model="order.phone" type="text" maxlength="12" @input="order.phone = order.phone.replace(/[^0-9+]/g, '')" />
                     </p>
                     <p>
                         <strong>State:</strong>
@@ -234,7 +234,7 @@
                 isOrderButtonDisabled() {
                     return !this.order.firstName.trim() || 
                            !this.order.lastName.trim() || 
-                           !this.order.phone.trim() ||
+                           this.order.phone.length !== 12 ||
                            !this.order.state.trim() ||
                            !this.order.method;
                 },
