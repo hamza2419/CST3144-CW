@@ -218,7 +218,13 @@
                 alert('Error submitting order. Please try again later.');
             });
         },
-        
+
+                resetForm() {
+                    this.order = { firstName: '', lastName: '', phone: '', state: '', method: ''};
+                    this.cart= [];
+                    console.log('Order form reset.');
+                },
+
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
                 },
