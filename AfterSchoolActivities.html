@@ -32,7 +32,7 @@
                         <option value="price">Price</option>
                         <option value="rating">Rating</option>
                         <option value="location">Location</option>
-                        <option value="stock">Stock</option>
+                        <option value="spaces">Spaces</option>
                     </select>
                     <div>
                         <button @click="sortAscending">Sort Ascending</button>
@@ -58,7 +58,6 @@
                             Only {{ product.availableInventory - cartCount(product.id) }} left!
                         </span>
                         <span v-else>Buy now!</span>
-
                         <span v-for="n in product.rating">★</span>
                         <span v-for="n in 5 - product.rating">☆</span>
                     </div>
@@ -81,7 +80,6 @@
                 <h2>Checkout</h2>
                 <div v-if="cart.length === 0">
                     <p>Your cart is empty. Please add items to your cart before placing an order.</p>
-                    
                 </div>
                 <div v-else>
                     <p>
@@ -167,7 +165,7 @@
                 },
                 showCheckout() {
                     if (this.cart.length === 0) {
-                        alert('Your cart is empty. Please add items before proceeding to checkout! ');
+                        console.log('Your cart is empty.');
                     } else {
                         this.showProduct = !this.showProduct;
                     }
@@ -176,38 +174,62 @@
                     const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
                     if (existingItem) {
                         existingItem.quantity = item.quantity;
-
-                        
                         if (existingItem.quantity === 0) {
                             this.cart.splice(this.cart.indexOf(existingItem), 1);
                         }
                     }
                 },
                 submitForm() {
-                    if (this.cart.length === 0) {
-                        alert('Your cart is empty. Please add items to your cart before placing an order.');
+                    if (this.cart.length === 0 || !this.order.firstName || !this.order.lastName || !this.order.phone || !this.order.state) {
+                        console.log('Order validation failed.');
                         return;
                     }
-                    if (!this.order.firstName || !this.order.lastName || !this.order.phone || !this.order.state) {
-                        alert('Please fill in the required fields in order to place your order!');
-                        return;
-                    }
-                    alert('Order submitted!');
-                    
+
+                    const orderDetails = {
+                        firstName: this.order.firstName.trim(),
+                        lastName: this.order.lastName.trim(),
+                        phone: this.order.phone.trim(),
+                        cart: this.cart.map(item => ({
+                            id: item.id,
+                            title: item.title,
+                            price: item.price,
+                            quantity: item.quantity
+                        }))
+                    };
+
+                    fetch('http://localhost:3000/order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderDetails)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.log('Failed to submit order.');
+                            return;
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Order submitted successfully:', data);
+                        this.resetForm();
+                    })
+                    .catch(error => {
+                        console.log('Error submitting order:', error);
+                    });
+                },
+                resetForm() {
+                    this.order = { firstName: '', lastName: '', phone: '', state: '', method: '' };
+                    this.cart = [];
+                    console.log('Order form reset.');
                 },
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
                 },
                 removeItem(item) {
-                    if (item.quantity > 1) {
-                        item.quantity--;
-                    }  else {
-                        const index = this.cart.indexOf(item);
-                        if (index > -1) {
-                            this.cart.splice(index, 1);
-                        }
-                    } 
-                    
+                    const index = this.cart.indexOf(item);
+                    if (index > -1) {
+                        this.cart.splice(index, 1);
+                    }
                 },
                 cartCount(id) {
                     return this.cart.filter(item => item.id === id).reduce((total, item) => total + item.quantity, 0);
@@ -216,7 +238,6 @@
                     const cartItem = this.cart.find(item => item.id === product.id);
                     return product.availableInventory - (cartItem ? cartItem.quantity : 0);
                 },
-                
                 sortAscending() {
                     this.sortOrder = 'asc';
                 },
@@ -239,19 +260,16 @@
                            !this.order.method;
                 },
                 cartTotal() {
-                    
                     return this.cart.length > 0
                         ? this.cart.reduce((total, item) => total + (item.quantity * item.price), 0).toFixed(2)
-                        : '0.00'; 
-               
-                    },
-               
+                        : '0.00';
+                },
                 filteredProducts() {
                     let productsToSort = [...this.products];
                     if (this.searchQuery) {
                         productsToSort = productsToSort.filter(product =>
                             product.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-                        );  
+                        );
                     }
                     if (this.sortOption === 'location') {
                         productsToSort.sort((a, b) => {
