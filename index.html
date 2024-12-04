@@ -128,13 +128,13 @@
             data: {
                 sitename: 'After School Activities',
                 showProduct: true,
-                products: [],
+                products: [], // This will store fetched products
                 order: {
                     firstName: '',
                     lastName: '',
                     phone: '',
                     state: '',
-                    method:''    
+                    method: ''
                 },
                 states: {
                     AL: 'Alabama',
@@ -184,7 +184,7 @@
                         alert('Please fill in the required fields.');
                         return;
                     }
-
+    
                     const orderDetails = {
                         firstName: this.order.firstName,
                         lastName: this.order.lastName,
@@ -194,37 +194,35 @@
                             id: item.id,
                             title: item.title,
                             price: item.price,
-                            quantity: item.quantity,
-                    })),
-                };
-
-                console.log('Order Details:', orderDetails); 
-
-                fetch('https://cst3144-cw-backend-eawc.onrender.com/order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(orderDetails),
-                })
-                .then((response) => {
-                    if (response.ok) {
-                        alert('Order submitted successfully!');
-                    this.resetForm();
-                } else {
-                    alert('Failed to submit order. Please try again.');
-                }
-            })
-            .catch((error) => {
-                console.error('Error submitting order:', error);
-                alert('Error submitting order. Please try again later.');
-            });
-        },
-
+                            quantity: item.quantity
+                        })),
+                    };
+    
+                    console.log('Order Details:', orderDetails);
+    
+                    fetch('https://cst3144-cw-backend-eawc.onrender.com/order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(orderDetails),
+                    })
+                        .then((response) => {
+                            if (response.ok) {
+                                alert('Order submitted successfully!');
+                                this.resetForm();
+                            } else {
+                                alert('Failed to submit order. Please try again.');
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Error submitting order:', error);
+                            alert('Error submitting order. Please try again later.');
+                        });
+                },
                 resetForm() {
-                    this.order = { firstName: '', lastName: '', phone: '', state: '', method: ''};
-                    this.cart= [];
+                    this.order = { firstName: '', lastName: '', phone: '', state: '', method: '' };
+                    this.cart = [];
                     console.log('Order form reset.');
                 },
-
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
                 },
@@ -247,27 +245,7 @@
                 sortDescending() {
                     this.sortOrder = 'desc';
                 },
-
-                mounted() {
-                console.log('Mounted function triggered'); // Debug message to confirm the function is called
-
-                fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
-            .then(response => {
-            console.log('Response status:', response.status); // Log response status for debugging
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json(); // Parse the JSON response
-        })
-        .then(data => {
-            console.log('Fetched products:', data); // Log the fetched data
-            this.products = data; // Assign the fetched products to the `products` array
-        })
-        .catch(error => {
-            console.error('Error loading products:', error); // Log any errors
-        });
-},
-
+            },
             computed: {
                 cartItemCount() {
                     return this.cart.reduce((total, item) => total + item.quantity, 0) || '';
@@ -276,11 +254,11 @@
                     return this.cart;
                 },
                 isOrderButtonDisabled() {
-                    return !this.order.firstName.trim() || 
-                           !this.order.lastName.trim() || 
-                           this.order.phone.length !== 12 ||
-                           !this.order.state.trim() ||
-                           !this.order.method;
+                    return !this.order.firstName.trim() ||
+                        !this.order.lastName.trim() ||
+                        this.order.phone.length !== 12 ||
+                        !this.order.state.trim() ||
+                        !this.order.method;
                 },
                 cartTotal() {
                     return this.cart.length > 0
@@ -307,7 +285,7 @@
                         productsToSort.sort((a, b) => {
                             const valueA = this.sortOption === 'name' ? a.title : this.sortOption === 'price' ? a.price : a.rating;
                             const valueB = this.sortOption === 'name' ? b.title : this.sortOption === 'price' ? b.price : b.rating;
-
+    
                             if (this.sortOrder === 'asc') {
                                 return valueA > valueB ? 1 : -1;
                             } else {
@@ -316,9 +294,29 @@
                         });
                     }
                     return productsToSort;
-                }
-            }
+                },
+            },
+            mounted() {
+                console.log('Mounted function triggered');
+    
+                fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Fetched products:', data);
+                        this.products = data;
+                    })
+                    .catch(error => {
+                        console.error('Error loading products:', error);
+                    });
+            },
         });
     </script>
+    
 </body>
 </html>
