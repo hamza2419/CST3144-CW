@@ -128,7 +128,7 @@
             data: {
                 sitename: 'After School Activities',
                 showProduct: true,
-                products: products,
+                products: [],
                 order: {
                     firstName: '',
                     lastName: '',
@@ -246,7 +246,24 @@
                 },
                 sortDescending() {
                     this.sortOrder = 'desc';
-                }
+                },
+
+                mounted() {
+
+                    fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('HTTP error! status: ${response.status}');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            this.products = data;
+                        })
+                        .catch(error => {
+                            console.error('Error loading products:', error);
+                        });
+                },
             },
             computed: {
                 cartItemCount() {
