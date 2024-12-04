@@ -252,12 +252,14 @@
 
                     fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
                         .then(response => {
+                            console.log('Response status:', response.status);
                             if (!response.ok) {
                                 throw new Error('HTTP error! status: ${response.status}');
                             }
                             return response.json();
                         })
                         .then(data => {
+                            console.log('Fetched products:', data);
                             this.products = data;
                         })
                         .catch(error => {
