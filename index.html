@@ -250,11 +250,13 @@
 
                 mounted() {
 
+                    console.log('Mounted function triggered');
+
                     fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
                         .then(response => {
                             console.log('Response status:', response.status);
                             if (!response.ok) {
-                                throw new Error('HTTP error! status: ${response.status}');
+                                throw new Error(`HTTP error! status: ${response.status}`);
                             }
                             return response.json();
                         })
@@ -287,6 +289,7 @@
                         : '0.00';
                 },
                 filteredProducts() {
+                    console.log('Current Products:', this.products);
                     let productsToSort = [...this.products];
                     if (this.searchQuery) {
                         productsToSort = productsToSort.filter(product =>
