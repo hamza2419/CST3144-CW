@@ -180,45 +180,50 @@
                     }
                 },
                 submitForm() {
-                    if (!this.order.firstName || !this.order.lastName || !this.order.phone || !this.order.state) {
-                        alert('Please fill in the required fields.');
-                        return;
-                    }
-    
-                    const orderDetails = {
-                        firstName: this.order.firstName,
-                        lastName: this.order.lastName,
-                        phone: this.order.phone,
-                        state: this.order.state,
-                        cart: this.cart.map(item => ({
-                            id: item.id,
-                            title: item.title,
-                            price: item.price,
-                            quantity: item.quantity
-                        })),
-                    };
-    
-                    console.log('Order Details:', orderDetails);
-    
-                    fetch('https://cst3144-cw-backend-eawc.onrender.com/order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(orderDetails),
-                    })
-                        .then((response) => {
-                            if (response.ok) {
-                                alert('Order submitted successfully!');
-                                this.resetForm();
-                            } else {
-                                alert('Failed to submit order. Please try again.');
-                            }
-                        })
-                        .catch((error) => {
-                            console.error('Error submitting order:', error);
-                            alert('Error submitting order. Please try again later.');
-                        });
-                },
-                resetForm() {
+    // Validation: Ensure required fields are filled
+    if (!this.order.firstName || !this.order.lastName || !this.order.phone || !this.order.state || this.cart.length === 0) {
+        alert('Please fill in all required fields and add items to the cart.');
+        return;
+    }
+
+    // Prepare the order details
+    const orderDetails = {
+        firstName: this.order.firstName,
+        lastName: this.order.lastName,
+        phone: this.order.phone,
+        state: this.order.state,
+        cart: this.cart.map(item => ({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            quantity: item.quantity
+        })),
+    };
+
+    // Log order details to ensure correctness
+    console.log('Order Details:', orderDetails);
+
+    // Submit the order to the backend
+    fetch('https://cst3144-cw-backend-eawc.onrender.com/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderDetails),
+    })
+        .then((response) => {
+            if (response.ok) {
+                alert('Order submitted successfully!');
+                this.resetForm(); // Clear the form and cart on success
+            } else {
+                console.error('Failed to submit order. Response status:', response.status);
+                alert('Failed to submit order. Please try again.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error submitting order:', error);
+            alert('Error submitting order. Please try again later.');
+        });
+},
+resetForm() {
                     this.order = { firstName: '', lastName: '', phone: '', state: '', method: '' };
                     this.cart = [];
                     console.log('Order form reset.');
