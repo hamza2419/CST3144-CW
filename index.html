@@ -136,7 +136,8 @@
                     lastName: '',
                     phone: '',
                     state: '',
-                    method: ''
+                    method: '',
+                    isGift: false
                 },
                 states: {
                     AL: 'Alabama',
@@ -194,7 +195,7 @@
         lastName: this.order.lastName,
         phone: this.order.phone,
         state: this.order.state,
-        isGift: this.order.gift || false,
+        isGift: this.order.isGift || false,
         cart: this.cart.map(item => ({
             id: item.id,
             title: item.title,
