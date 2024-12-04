@@ -194,6 +194,7 @@
         lastName: this.order.lastName,
         phone: this.order.phone,
         state: this.order.state,
+        isGift: this.order.gift || false,
         cart: this.cart.map(item => ({
             id: item.id,
             title: item.title,
