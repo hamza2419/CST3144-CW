@@ -249,26 +249,25 @@
                 },
 
                 mounted() {
+                console.log('Mounted function triggered'); // Debug message to confirm the function is called
 
-                    console.log('Mounted function triggered');
+                fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
+            .then(response => {
+            console.log('Response status:', response.status); // Log response status for debugging
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); // Parse the JSON response
+        })
+        .then(data => {
+            console.log('Fetched products:', data); // Log the fetched data
+            this.products = data; // Assign the fetched products to the `products` array
+        })
+        .catch(error => {
+            console.error('Error loading products:', error); // Log any errors
+        });
+},
 
-                    fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
-                        .then(response => {
-                            console.log('Response status:', response.status);
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Fetched products:', data);
-                            this.products = data;
-                        })
-                        .catch(error => {
-                            console.error('Error loading products:', error);
-                        });
-                },
-            },
             computed: {
                 cartItemCount() {
                     return this.cart.reduce((total, item) => total + item.quantity, 0) || '';
