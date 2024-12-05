@@ -10,22 +10,22 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
-<body>
+<body> 
     <div id="app">
         <header>
-            <h1 v-text="sitename"></h1>
-            <button v-on:click="handleCheckout" class="checkout-button">
+            <h1 v-text="sitename"></h1>   
+            <button v-on:click="handleCheckout" class="checkout-button"> <!--checkout button showing cart item count-->
                 {{ cartItemCount }}
                 <span class="fas fa-cart-plus"></span> Checkout
             </button>
         </header>
         <main>
-            <div v-if="showProduct">
+            <div v-if="showProduct"> <!--search bar for filtering products-->
                 <div>
                     <label for="searchBar">Search Products:</label>
                     <input type="text" v-model="searchQuery" id="searchBar" placeholder="Search for Activities...">
                 </div>
-                <div>
+                <div> <!--sort options for the products-->
                     <label for="sortOptions">Sort by:</label>
                     <select v-model="sortOption" id="sortOptions">
                         <option value="name">Name</option>
@@ -39,9 +39,9 @@
                         <button @click="sortDescending">Sort Descending</button>
                     </div>
                 </div>
-                <div class="product-list">
+                <div class="product-list"> <!--product list-->
                     <div class="product-item" v-for="product in filteredProducts" :key="product.id">
-                        <h2 v-text="product.title"></h2>
+                        <h2 v-text="product.title"></h2> <!--product details-->
                         <figure>
                             <img :src="product.image" alt="Product Image" />
                         </figure>
@@ -49,26 +49,26 @@
                         <p>Price: {{ product.price }} $</p>
                         <p>Available Spaces: {{ availableStock(product) }}</p>
                         <p><strong>Location:</strong> {{ product.Location }}</p>
-                        <button v-on:click="addToCart(product)" v-if="canAddToCart(product)">
+                        <button v-on:click="addToCart(product)" v-if="canAddToCart(product)"> <!--addtocart button-->
                             Add to cart
                         </button>
                         <button disabled v-else>Add to cart</button>
-                        <span v-if="product.availableInventory === cartCount(product.id)">All out!</span>
+                        <span v-if="product.availableInventory === cartCount(product.id)">All out!</span> <!--stock warnings-->
                         <span v-else-if="product.availableInventory - cartCount(product.id) < 5">
                             Only {{ product.availableInventory - cartCount(product.id) }} left!
                         </span>
                         <span v-else>Buy now!</span>
-                        <span v-for="n in product.rating">★</span>
+                        <span v-for="n in product.rating">★</span> <!--product rating-->
                         <span v-for="n in 5 - product.rating">☆</span>
                     </div>
                 </div>
             </div>
             <div v-else>
-                <h2>Your Cart</h2>
+                <h2>Your Cart</h2> <!--cart details-->
                 <div class="cart-box">
                     <div v-for="item in cartItems" :key="item.id" class="cart-item">
-                        <p>{{ item.title }}</p>
-                        <select v-model="item.quantity" @change="updateCart(item)">
+                        <p>{{ item.title }}</p> 
+                        <select v-model="item.quantity" @change="updateCart(item)"> <!--quantity selector-->
                             <option v-for="n in 11" :key="n" :value="n - 1">{{ n - 1 }}</option>
                         </select>
                         <p>Price: {{ (item.quantity * item.price).toFixed(2) }} $</p>
@@ -77,12 +77,12 @@
                     </div>
                     <p><strong>Total: {{ cartTotal }} $</strong></p>
                 </div>
-                <h2>Checkout</h2>
+                <h2>Checkout</h2> <!--checkout details-->
                 <div v-if="cart.length === 0">
                     <p>Your cart is empty. Please add items to your cart before placing an order.</p>
                 </div>
                 <div v-else>
-                    <p>
+                    <p> <!--user details-->
                         <strong>First Name:</strong>
                         <input v-model.trim="order.firstName" />
                     </p>
@@ -103,7 +103,7 @@
                             </option>
                         </select>
                     </p>
-                    <p>
+                    <p> <!--delivery method-->
                         <input type="radio" id="home" value="Home" v-model="order.method" />
                         <label for="home">Home</label>
                         <input type="radio" id="business" value="Business" v-model="order.method" />
@@ -129,10 +129,10 @@
             el: '#app',
             data: {
                 sitename: 'After School Activities',
-                showProduct: true,
-                products: [], // This will store fetched products
+                showProduct: true, // toggle between product and cart view
+                products: [], // store fetched products
                 order: {
-                    firstName: '',
+                    firstName: '', 
                     lastName: '',
                     phone: '',
                     state: '',
@@ -148,10 +148,10 @@
                 cart: [],
                 sortOption: 'name',
                 sortOrder: 'asc',
-                searchQuery: ''
+                searchQuery: '' // user's search query
             },
             methods: {
-                addToCart(product) {
+                addToCart(product) { // adding products to cart
                     const existingItem = this.cart.find(item => item.id === product.id);
                     if (existingItem) {
                         existingItem.quantity++;
@@ -159,21 +159,21 @@
                         this.cart.push({ id: product.id, title: product.title, quantity: 1, price: product.price, maxQuantity: product.availableInventory });
                     }
                 },
-                handleCheckout() {
+                handleCheckout() { // switching to checkout view
                     if (this.cart.length === 0) {
                         this.showProduct = true;
                     } else {
                         this.showCheckout();
                     }
                 },
-                showCheckout() {
+                showCheckout() { // toggle checkout view
                     if (this.cart.length === 0) {
                         console.log('Your cart is empty.');
                     } else {
                         this.showProduct = !this.showProduct;
                     }
                 },
-                updateCart(item) {
+                updateCart(item) { // update product quantity in cart
                     const existingItem = this.cart.find(cartItem => cartItem.id === item.id);
                     if (existingItem) {
                         existingItem.quantity = item.quantity;
@@ -182,14 +182,14 @@
                         }
                     }
                 },
-                submitForm() {
-    // Validation: Ensure required fields are filled
+                submitForm() { // validate and submit order
+    // Validation check to ensure required fields are filled
     if (!this.order.firstName || !this.order.lastName || !this.order.phone || !this.order.state || this.cart.length === 0) {
         alert('Please fill in all required fields and add items to the cart.');
         return;
     }
 
-    // Prepare the order details
+    // Preparing the order details
     const orderDetails = {
         firstName: this.order.firstName,
         lastName: this.order.lastName,
@@ -227,54 +227,54 @@
             alert('Error submitting order. Please try again later.');
         });
 },
-resetForm() {
+                resetForm() { // resets the order form
                     this.order = { firstName: '', lastName: '', phone: '', state: '', method: '' };
                     this.cart = [];
                     console.log('Order form reset.');
                 },
-                canAddToCart(product) {
+                canAddToCart(product) { // checks if the product can be added
                     return product.availableInventory > this.cartCount(product.id);
                 },
-                removeItem(item) {
+                removeItem(item) { // remove items from cart
                     const index = this.cart.indexOf(item);
                     if (index > -1) {
                         this.cart.splice(index, 1);
                     }
                 },
-                cartCount(id) {
+                cartCount(id) { // counts products in cart
                     return this.cart.filter(item => item.id === id).reduce((total, item) => total + item.quantity, 0);
                 },
-                availableStock(product) {
+                availableStock(product) { // calculates available stock for a product
                     const cartItem = this.cart.find(item => item.id === product.id);
                     return product.availableInventory - (cartItem ? cartItem.quantity : 0);
                 },
-                sortAscending() {
+                sortAscending() { // sorts products in ascending order
                     this.sortOrder = 'asc';
                 },
-                sortDescending() {
+                sortDescending() { // sorts products in descending order
                     this.sortOrder = 'desc';
                 },
             },
             computed: {
-                cartItemCount() {
+                cartItemCount() { // total items in cart
                     return this.cart.reduce((total, item) => total + item.quantity, 0) || '';
                 },
-                cartItems() {
+                cartItems() { // all items in cart
                     return this.cart;
                 },
-                isOrderButtonDisabled() {
+                isOrderButtonDisabled() { // validates order form
                     return !this.order.firstName.trim() ||
                         !this.order.lastName.trim() ||
                         this.order.phone.length !== 12 ||
                         !this.order.state.trim() ||
                         !this.order.method;
                 },
-                cartTotal() {
+                cartTotal() { // calculates cart total
                     return this.cart.length > 0
                         ? this.cart.reduce((total, item) => total + (item.quantity * item.price), 0).toFixed(2)
                         : '0.00';
                 },
-                filteredProducts() {
+                filteredProducts() { // filters products based on the criteria
                     console.log('Current Products:', this.products);
                     let productsToSort = [...this.products];
                     if (this.searchQuery) {
@@ -308,7 +308,7 @@ resetForm() {
                     return productsToSort;
                 },
             },
-            mounted() {
+            mounted() { // fetches products from backend
                 console.log('Mounted function triggered');
     
                 fetch('https://cst3144-cw-backend-eawc.onrender.com/products')
