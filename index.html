@@ -278,8 +278,11 @@ resetForm() {
                     console.log('Current Products:', this.products);
                     let productsToSort = [...this.products];
                     if (this.searchQuery) {
+                        const query = this.searchQuery.toLowerCase();
                         productsToSort = productsToSort.filter(product =>
-                            product.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                            product.title.toLowerCase().includes(query) ||
+                            product.Location.toLowerCase().includes(query) ||
+                            product.description.toLowerCase().includes(query)
                         );
                     }
                     if (this.sortOption === 'location') {
