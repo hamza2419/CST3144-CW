@@ -322,6 +322,16 @@ resetForm() {
                     .then(data => {
                         console.log('Fetched products:', data);
                         this.products = data;
+
+                        if (this.searchQuery) {
+                            const query = this.searchQuery.toLowerCase();
+                            this.products = this.products.filter(product =>
+                            product.title.toLowerCase().includes(query) ||
+                            product.Location.toLowerCase().includes(query) ||
+                            (product.description && product.description.toLowerCase().includes(query))
+                            );
+                            console.log('Filtered products:', this.products);
+                        }    
                     })
                     .catch(error => {
                         console.error('Error loading products:', error);
